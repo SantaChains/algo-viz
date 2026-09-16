@@ -1,0 +1,47 @@
+@use '../../styles/mixins' as m;
+
+.scroll {
+  overflow-x: auto;
+  flex: 1 1 auto;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  width: max-content;
+  min-width: 100%;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: m.rem(10px);
+  color: var(--mantine-color-dimmed);
+  font-variant-numeric: tabular-nums;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: m.rem(36px);
+  padding: m.rem(4px) m.rem(6px);
+  border-radius: var(--mantine-radius-sm);
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+  font-size: m.rem(14px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+
+  &.selected {
+    border-color: light-dark(var(--mantine-color-yellow-7), var(--mantine-color-yellow-4));
+    background: light-dark(var(--mantine-color-yellow-0), rgba(253, 212, 140, 0.15));
+  }
+
+  &.patched {
+    border-color: light-dark(var(--mantine-color-violet-7), var(--mantine-color-violet-4));
+    background: light-dark(var(--mantine-color-violet-0), rgba(196, 181, 253, 0.18));
+  }
+}

@@ -1,0 +1,24 @@
+@use '../../styles/mixins' as m;
+
+// 日志卡恒占可视化区 38.2%（黄金分割），与图区维持 0.618:1；
+// 不参与 flex 收缩与增长，播放中尺寸恒定，超长内容在内部 pre 滚动。
+// !important 压过 layouts.module.scss 的 .layout > * 通配分配（跨 module 顺序不可依赖）
+.logCard {
+  flex: 0 0 38.2% !important;
+  // 滚动收敛到内部 pre：卡片外壳不滚，贴底跟随才能生效
+  overflow: hidden;
+}
+
+.log {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: m.rem(13px);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--mantine-color-text);
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN" data-mantine-color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="viewport"
+      content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
+    />
+    <title>algo-viz - 算法可视化</title>
+    <script>
+      (() => {
+        const stored = localStorage.getItem('mantine-color-scheme-value');
+        const scheme =
+          stored === 'light' || stored === 'dark'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+        document.documentElement.setAttribute('data-mantine-color-scheme', scheme);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

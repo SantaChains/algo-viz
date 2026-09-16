@@ -1,0 +1,42 @@
+name: Deploy Pages
+
+# algo-viz 独立成仓库后此 workflow 自动生效；
+# 若保留在嵌套大仓库，需将本文件移至仓库根 .github/workflows 并加 paths 过滤与 working-directory（见 docs/deployment.md）。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+        env:
+          # 项目页子路径；若仓库名为 <user>.github.io 或绑自定义域名，改为 BASE_PATH: /
+          BASE_PATH: /${{ github.event.repository.name }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

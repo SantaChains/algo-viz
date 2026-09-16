@@ -1,0 +1,41 @@
+// postcss-preset-mantine 提供的 @mixin light/dark/larger-than/smaller-than
+// 在 .scss 中会被 Sass 先行消化而无法到达 PostCSS，这里用 Sass 原生 @mixin 复刻同名能力。
+// 注意：新版 Sass 已内置 rem()/em() 全局函数（签名不同），
+// .scss 中请使用本文件命名空间下的 m.rem()，其输出与 postcss-preset-mantine 完全一致。
+
+@use 'sass:math';
+
+// Mantine 断点，与官方 postcss-simple-vars 配置保持一致
+$bp-xs: 36em;
+$bp-sm: 48em;
+$bp-md: 62em;
+$bp-lg: 75em;
+$bp-xl: 88em;
+
+@function rem($px) {
+  @return calc(#{math.div($px, 16px)}rem * var(--mantine-scale));
+}
+
+@mixin light {
+  [data-mantine-color-scheme='light'] & {
+    @content;
+  }
+}
+
+@mixin dark {
+  [data-mantine-color-scheme='dark'] & {
+    @content;
+  }
+}
+
+@mixin larger-than($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin smaller-than($breakpoint) {
+  @media (max-width: calc(#{$breakpoint} - 0.01em)) {
+    @content;
+  }
+}

@@ -1,0 +1,82 @@
+@use '../styles/mixins' as m;
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: m.rem(12.5px);
+  line-height: 1.7;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 3em minmax(0, 1fr);
+  align-items: start;
+  column-gap: m.rem(10px);
+  padding-inline: m.rem(6px);
+  border-radius: m.rem(6px);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--mantine-color-default-hover);
+  }
+
+  &.current {
+    background: var(--mantine-color-violet-light);
+    box-shadow: inset 3px 0 0 var(--mantine-color-violet-filled);
+  }
+}
+
+.annotated {
+  grid-template-columns: 3em minmax(0, 1fr) minmax(11em, 38%);
+}
+
+.lineNo {
+  text-align: right;
+  color: var(--mantine-color-dimmed);
+  user-select: none;
+  font-size: m.rem(11px);
+  padding-top: m.rem(2px);
+}
+
+.code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--mantine-color-text);
+}
+
+.annotation {
+  border-inline-start: 2px solid var(--mantine-color-violet-outline);
+  padding-inline-start: m.rem(8px);
+  margin-block: m.rem(2px);
+  font-family: var(--mantine-font-family);
+}
+
+.kw {
+  color: var(--mantine-color-violet-7);
+
+  [data-mantine-color-scheme='dark'] & {
+    color: var(--mantine-color-violet-4);
+  }
+}
+
+.str {
+  color: var(--mantine-color-teal-7);
+
+  [data-mantine-color-scheme='dark'] & {
+    color: var(--mantine-color-teal-4);
+  }
+}
+
+.num {
+  color: var(--mantine-color-orange-7);
+
+  [data-mantine-color-scheme='dark'] & {
+    color: var(--mantine-color-orange-4);
+  }
+}
+
+.com {
+  color: var(--mantine-color-dimmed);
+  font-style: italic;
+}

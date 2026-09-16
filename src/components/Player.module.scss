@@ -1,0 +1,32 @@
+@use '../styles/mixins' as m;
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: m.rem(16px);
+  padding: m.rem(10px) m.rem(14px);
+  border-radius: var(--mantine-radius-md);
+  background: light-dark(#fafafa, #0e0e12);
+  border: 1px solid var(--mantine-color-default-border);
+
+  @include m.smaller-than(m.$bp-sm) {
+    flex-wrap: wrap;
+  }
+}
+
+.progress {
+  flex: 1 1 auto;
+}
+
+.counter {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.speedGroup {
+  flex-shrink: 0;
+}
+
+.speed {
+  width: m.rem(90px);
+}

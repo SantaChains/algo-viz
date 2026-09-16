@@ -1,0 +1,11 @@
+/*
+ * Tailwind v4 工具类入口（工具层，非手写样式）。
+ * 分层导入、跳过 preflight：避免 reset 破坏 Mantine 组件外观。
+ * 手写样式一律走 *.module.scss（见 global.scss 与各模块）。
+ */
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* dark: 变体桥接 Mantine 配色属性——两套主题系统同源联动 */
+@custom-variant dark (&:where([data-mantine-color-scheme='dark'], [data-mantine-color-scheme='dark'] *));

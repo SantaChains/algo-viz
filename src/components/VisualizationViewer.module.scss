@@ -1,0 +1,10 @@
+.viewer {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 320px;
+  max-height: 560px;
+  // 兜底：卡片触底后若仍放不下，整体滚动而不是继续挤压
+  overflow-y: auto;
+  overflow-x: hidden;
+}

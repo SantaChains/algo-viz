@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "target": "es2023",
+        "lib": [
+            "ES2023",
+            "DOM"
+        ],
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "types": [
+            "bun",
+            "vite/client",
+            "node"
+        ],
+        "jsx": "react-jsx",
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "moduleDetection": "force",
+        "noEmit": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "erasableSyntaxOnly": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "include": [
+        "."
+    ]
+}

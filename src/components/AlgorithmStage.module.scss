@@ -1,0 +1,70 @@
+@use '../styles/mixins' as m;
+
+.source {
+  margin: 0;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: m.rem(12.5px);
+  line-height: 1.65;
+  white-space: pre;
+  color: var(--mantine-color-text);
+}
+
+// 桌面双列：整页一屏，不产生页面滚动，播放器/统计条常驻视口内
+.stage {
+  @include m.larger-than(m.$bp-lg) {
+    height: calc(100dvh - 88px); // AppShell header 56 + 上下 padding 32
+    overflow: hidden;
+  }
+}
+
+// Grid 吸收标题/切换之外的剩余高度，左右两列随之等高
+// Mantine Grid 在挂类元素与 Col 之间还有一层 .mantine-Grid-inner，需一并约束，
+// 否则该层被源码面板内容撑高，整列溢出一屏
+.stageGrid {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  > :global(.mantine-Grid-inner) {
+    height: 100%;
+    min-height: 0;
+
+    > :global(.mantine-Grid-col) {
+      height: 100%;
+      min-height: 0;
+    }
+  }
+}
+
+.leftCol {
+  min-height: 0;
+}
+
+// 统计条与播放器：不参与收缩，始终完整可见；StatsBar 未产生步数时为空节点
+.fixed {
+  flex: 0 0 auto;
+
+  &:empty {
+    display: none;
+  }
+}
+
+// 认知锚点：空间不足时优先让位并内部滚动
+.notes {
+  border-inline-start: 3px solid var(--mantine-color-violet-filled);
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+// 源码面板：与左列等高固定，内部滚动跟随当前执行行，不随页面滑动
+.codePanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.codeScroll {
+  flex: 1;
+  min-height: 0;
+}

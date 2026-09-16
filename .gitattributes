@@ -1,0 +1,3 @@
+# 统一行尾为 LF：本仓在 Windows 编辑、GitHub Actions(Linux) 构建，
+# 强制 LF 可避免 CRLF 往返 churn，并保证 delay-line 插件的字符级扫描与 diff 稳定。
+* text=auto eol=lf

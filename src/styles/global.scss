@@ -1,0 +1,11 @@
+// 入口级全局样式，组件级样式一律走 *.module.scss
+// Mantine 的组件样式由 @mantine/core/styles.css 提供，这里只做最小补充
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+}

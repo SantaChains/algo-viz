@@ -1,0 +1,17 @@
+@use '../../styles/mixins' as m;
+
+.layout {
+  display: flex;
+  gap: m.rem(12px);
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+
+  // 卡片弹性填充：日志卡以自身固定比例优先，其余卡分摊剩余空间，
+  // 保证播放过程中可视化卡片尺寸不随日志增长而跳动
+  > * {
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+  }
+}

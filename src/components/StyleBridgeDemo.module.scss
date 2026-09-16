@@ -1,0 +1,12 @@
+@use '../styles/mixins' as m;
+
+.scssCard {
+  border-radius: var(--mantine-radius-lg);
+  padding: m.rem(12px);
+  border: 1px solid var(--mantine-color-default-border);
+  background: light-dark(#fafafa, #0e0e12);
+
+  @include m.dark {
+    box-shadow: 0 0 0 2px light-dark(transparent, rgba(196, 181, 253, 0.35));
+  }
+}

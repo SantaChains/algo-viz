@@ -1,0 +1,67 @@
+@use '../../styles/mixins' as m;
+
+.svg {
+  width: 100%;
+  max-width: m.rem(420px);
+  // 高度跟随卡片可视区，contain 保证 viewBox 内容完整不裁剪
+  height: 100%;
+  object-fit: contain;
+  margin: auto;
+}
+
+.arrow {
+  fill: currentColor;
+}
+
+.edge {
+  stroke: var(--mantine-color-default-border);
+  stroke-width: 1.5;
+  fill: none;
+  transition: stroke 0.15s ease;
+
+  &.visited {
+    stroke: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-4));
+  }
+
+  &.selected {
+    stroke: light-dark(var(--mantine-color-yellow-7), var(--mantine-color-yellow-4));
+    stroke-width: 3;
+  }
+}
+
+.edgeWeight {
+  fill: var(--mantine-color-dimmed);
+  font-size: 11px;
+  paint-order: stroke;
+  stroke: light-dark(#fafafa, #0e0e12);
+  stroke-width: 3px;
+}
+
+.node {
+  fill: var(--mantine-color-body);
+  stroke: var(--mantine-color-default-border);
+  stroke-width: 1.5;
+  transition: fill 0.15s ease, stroke 0.15s ease;
+
+  &.visited {
+    fill: light-dark(var(--mantine-color-blue-1), rgba(109, 166, 246, 0.25));
+    stroke: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-4));
+  }
+
+  &.selected {
+    stroke: light-dark(var(--mantine-color-yellow-7), var(--mantine-color-yellow-4));
+    stroke-width: 3;
+  }
+}
+
+.nodeId {
+  fill: var(--mantine-color-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nodeWeight {
+  fill: var(--mantine-color-dimmed);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
