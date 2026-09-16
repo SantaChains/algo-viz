@@ -47,5 +47,5 @@ workflow 位于 `.github/workflows/deploy.yml`：checkout → setup-bun → `bun
 ## 平台无关事项
 
 - 资源缓存：assets 带 hash 可长缓存；两平台默认策略即可，无需自定义 header。
-- `public/` 内 favicon.svg 与 icons.svg 原样拷贝，注意引用一律走根路径 `/xxx` 让 Vite 重写。
+- `public/` 内 favicon.svg 原样拷贝，注意引用一律走根路径 `/xxx` 让 Vite 重写。
 - 部署后冒烟检查清单：着陆页流场动画 → 任一算法页播放 → 任一模拟页交互 → 深浅色切换 → 直接刷新 `#/lab/...` 深链可还原。
