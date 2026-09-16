@@ -12,17 +12,26 @@ permissions:
   pages: write
   id-token: write
 
+# 官方 Pages 模板取 cancel-in-progress: false：
+# 连续 push 时取消进行中的部署会让站点停留旧版，宁可排队
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+        with:
+          # 仓库变量 BUN_VERSION 可选固定版本，未设默认 latest
+          bun-version: ${{ vars.BUN_VERSION || 'latest' }}
       - run: bun install --frozen-lockfile
+      # 质量门禁：lint 0 警告基线 + 单元测试，先于类型检查与构建
+      - run: bun run lint
+      - run: bun test
       - run: bun run build
         env:
           # 项目页子路径；若仓库名为 <user>.github.io 或绑自定义域名，改为 BASE_PATH: /
@@ -34,6 +43,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

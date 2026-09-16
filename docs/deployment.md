@@ -41,7 +41,7 @@ workflow 位于 `.github/workflows/deploy.yml`：checkout → setup-bun → `bun
    - Build command: `bun run build`（构建镜像内置 bun；用 npm 则 `npm run build`）
    - Build output directory: `dist`
    - 环境变量：无需设置（根域名部署，base 默认 `/`）
-3. Node/bun 版本可用环境变量指定：`BUN_VERSION` 或 `NODE_VERSION`。
+3. bun 版本可以仓库变量 `BUN_VERSION` 可选固定（未设默认 latest）；CI 含 lint + test 门禁，先于构建。
 4. hash 路由无需 `_redirects` / `404.html`。
 
 ## 平台无关事项
