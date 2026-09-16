@@ -37,6 +37,10 @@ jobs:
           # 项目页子路径；若仓库名为 <user>.github.io 或绑自定义域名，改为 BASE_PATH: /
           BASE_PATH: /${{ github.event.repository.name }}
       - uses: actions/configure-pages@v5
+        with:
+          # 仓库未手动开 Pages 时由 API 自动启用（Source=GitHub Actions），首跑即通；
+          # 未加此参数时首跑会报 Get Pages site failed: Not Found
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

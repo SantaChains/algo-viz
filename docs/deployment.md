@@ -19,12 +19,12 @@ $env:BASE_PATH='/algo-viz'; npx vite build; npx vite preview
 
 ## GitHub Pages（Actions）
 
-workflow 位于 `.github/workflows/deploy.yml`：checkout → setup-bun → `bun install --frozen-lockfile` → `bun run build`（注入 BASE_PATH）→ upload-pages-artifact → deploy-pages（官方四件套，OIDC 免 token）。
+workflow 位于 `.github/workflows/deploy.yml`：checkout → setup-bun → `bun install --frozen-lockfile` → lint + test 门禁 → `bun run build`（注入 BASE_PATH）→ configure-pages（`enablement: true` 自动开 Pages）→ upload-pages-artifact → deploy-pages（官方四件套，OIDC 免 token）。
 
 启用步骤：
 
 1. 将 algo-viz 推为独立 GitHub 仓库（当前 workflow 放在 algo-viz 目录内，嵌套仓库中不生效；独立成仓后自动生效）。
-2. 仓库 Settings → Pages → Source 选 GitHub Actions。
+2. 无需手动设置：configure-pages 的 `enablement: true` 会在首跑时经 API 自动启用 Pages（Source=GitHub Actions）；若偏好手动，仓库 Settings → Pages → Source 选 GitHub Actions 亦可。
 3. push 到 main 或手动 workflow_dispatch 触发；首次约 2 分钟出地址 `https://<user>.github.io/<repo>/`。
 
 注意：
