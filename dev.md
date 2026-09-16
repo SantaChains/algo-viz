@@ -62,6 +62,7 @@ Layout（core/layouts）：`HorizontalLayout / VerticalLayout(key, childKeys)`�
 
 注意：渲染器接收 tracer 内部数组/对象的**引用**（重放时原地 mutate），故**不可** `React.memo`——引用不变会漏更新。
 
+
 ## 算法 demo 契约 (algorithms/types.ts)
 
 ```ts
@@ -79,7 +80,7 @@ AlgorithmDemo {
 
 `demos: Record<分类key, AlgorithmDemo[]>`（algorithms/index.ts）。
 
-生成器 (generators.ts)：`generateSortData`（四分布，分布表 `DISTRIBUTIONS`）/ `generateMatrix`（树骨架+补边，保证连通）/ `generateWeighted`（复用 matrix 结构，权重 = 1 + ⌊弦长/120⌋ 由 `circleCoord` 圆布局几何确定，保证 Dijkstra/A* 的启发式 h 可采纳）/ `generateStrings`（'ab' 字母表，模式串保证匹配）/ `generateValues`（LIS）/ `generateWords`（'abc' 字母表）/ `generateIntervals`（区间长度 1..5）。全部基于 `mulberry32(seed)`，同种子同序列；模拟掷骰用 `randomSeed()`（core/random.ts）。
+生成器 (generators.ts)：`generateSortData`（四分布，分布表 `DISTRIBUTIONS`）/ `generateMatrix`（树骨架 + 补边，保证连通）/ `generateWeighted`（复用 matrix 结构，权重 = 1 + ⌊弦长/120⌋ 由 `circleCoord` 圆布局几何确定，保证 Dijkstra/A* 的启发式 h 可采纳）/ `generateStrings`（'ab' 字母表，模式串保证匹配）/ `generateValues`（LIS）/ `generateWords`（'abc' 字母表）/ `generateIntervals`（区间长度 1..5）。全部基于 `mulberry32(seed)`，同种子同序列；模拟掷骰用 `randomSeed()`（core/random.ts）。
 
 ## delay-line 插件 (plugins/delay-line.ts)
 
@@ -98,8 +99,8 @@ hash 单一事实源，`hashchange` 驱动视图，刷新与分享不丢状态�
 
 - `Shell`：AppShell（navbar 分类 / aside 设置）；路由 prop 经 `resolveRoute` 白名单校验后以渲染期重置同步（禁 effect 级联）；导航动作只写 hash；React.lazy 按需加载
 - `Home`：着陆页，`onEnter(category)` 写 `#/lab/{category}`
-- `AlgorithmStage`：Grid 双栏（左可视化+统计+播放器+不变式，右粘性 SourcePanel）；SegmentedControl 切 demo
-- `SourcePanel`：行号+代码+注释三列；当前行 = `viz.chunks[cursor-1].lineNumber`；点击行 seek；highlight.ts 轻量 tokenize
+- `AlgorithmStage`：Grid 双栏（左可视化 + 统计 + 播放器 + 不变式，右粘性 SourcePanel）；SegmentedControl 切 demo
+- `SourcePanel`：行号 + 代码 + 注释三列；当前行 = `viz.chunks[cursor-1].lineNumber`；点击行 seek；highlight.ts 轻量 tokenize
 - `Player`：播放/步进/进度/速度；键盘 Space/←→（输入框聚焦忽略）
 - `StatsBar`：steps + byMethod 徽章
 - `SettingsPanel`：按 kind 渲染参数控件，改动即时重录

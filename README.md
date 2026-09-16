@@ -24,13 +24,15 @@ bun run lint     # oxlint
 - 命令流统计：步数、比较、写入、入队、发现、回溯等操作计数徽章
 - 认知锚点：不变式说明 + 复杂度徽章 + 轻量语法高亮（关键字/字符串/数字/注释）
 
+![1789560252941](image/README/1789560252941.png)
+
 ## 已覆盖算法
 
 | 分类     | 算法                                                                           |
-|----------|--------------------------------------------------------------------------------|
+| -------- | ------------------------------------------------------------------------------ |
 | 排序     | 冒泡排序、快速排序（Lomuto 分区）                                              |
 | 查找     | 二分查找                                                                       |
-| 图论     | 深度优先搜索、广度优先搜索、Dijkstra 最短路、A* 启发式搜索                     |
+| 图论     | 深度优先搜索、广度优先搜索、Dijkstra 最短路、A\* 启发式搜索                    |
 | 字符串   | KMP（fail 失配表 + 线性扫描）                                                  |
 | 动态规划 | 最长上升子序列、编辑距离                                                       |
 | 贪心     | 区间调度                                                                       |
@@ -49,6 +51,8 @@ src/
 └── components/     # Shell、AlgorithmStage、SimulationStage、SourcePanel、Player、StatsBar、SettingsPanel
 ```
 
+![1789560204937](image/dev/1789560204937.png)
+
 ## 部署
 
 纯静态产物：hash 路由免 404 fallback、源码编译期内联、无运行时网络请求，GitHub Pages / Cloudflare Pages 均可直接托管。子路径经 `BASE_PATH` 环境变量注入构建，本地开发零配置。部署步骤见 [docs/deployment.md](docs/deployment.md)，架构现状与 SQLite 演进路线见 [docs/architecture-roadmap.md](docs/architecture-roadmap.md)。
@@ -62,7 +66,7 @@ Vite 8（Rolldown） · React 19.3 · TypeScript 7（tsgo） · Mantine 9 · Tai
 ## 未来路线
 
 - 学习方式深化：步骤语义条（把当前帧命令翻译为「比较 a[3] 与 a[4]」式短句）；Chart/Tree 渲染器，解锁计数排序与树结构（Array2D 渲染器与 dp 表格已落地）
-- 算法扩充：归并排序、堆排序、插入排序；Kruskal、Prim、拓扑排序；LCS、背包；Trie、Manacher、Rabin-Karp（Dijkstra、A*、编辑距离已落地）
+- 算法扩充：归并排序、堆排序、插入排序；Kruskal、Prim、拓扑排序；LCS、背包；Trie、Manacher、Rabin-Karp（Dijkstra、A\*、编辑距离已落地）
 - 调试界面增强：对比模式（同输入下两种算法并排重放）、断点标记、多帧步骤书签（单帧 cfg 快照分享已落地）
 - 工程化：VitePress 文档站、单元测试覆盖 engine 分帧/重放与 delay-line 插件、CI 在现有 build（含 tsc 类型检查）基础上增加 lint + test 门禁
 
