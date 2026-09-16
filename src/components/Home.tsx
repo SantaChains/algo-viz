@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import {
   ActionIcon,
   Box,
@@ -9,7 +10,18 @@ import {
   useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core';
-import { IconArrowUpRight, IconMoon, IconSun } from '@tabler/icons-react';
+import {
+  IconArrowUpRight,
+  IconArrowsSort,
+  IconGraph,
+  IconGridDots,
+  IconLetterCase,
+  IconMoon,
+  IconSearch,
+  IconSun,
+  IconTarget,
+} from '@tabler/icons-react';
+import type { Icon } from '@tabler/icons-react';
 import { FlowField } from './FlowField';
 import styles from './Home.module.scss';
 
@@ -30,6 +42,71 @@ const CATEGORY_CARDS: Card[] = [
 const REFERENCES = [
   { name: 'algorithm-visualizer', url: 'https://github.com/algorithm-visualizer/algorithm-visualizer' },
   { name: 'aoright/Algorithm-Visualizer', url: 'https://github.com/aoright/Algorithm-Visualizer' },
+];
+
+// 分类图标与实验室导航（Shell）保持一致，首页与内页同一套图标语言
+const CATEGORY_ICONS: Record<string, Icon> = {
+  sorting: IconArrowsSort,
+  search: IconSearch,
+  dp: IconGridDots,
+  graph: IconGraph,
+  greedy: IconTarget,
+  string: IconLetterCase,
+};
+
+/** 卡片右上角算法族徽标：纯静态 stroke SVG，零运行时成本，hover 点亮 */
+const MOTIFS: Record<string, ReactNode> = {
+  sorting: (
+    <svg viewBox="0 0 64 32" aria-hidden="true">
+      <path d="M6 28V16 M16 28V8 M26 28V20 M36 28V4 M46 28V12 M56 28V22" />
+    </svg>
+  ),
+  search: (
+    <svg viewBox="0 0 64 32" aria-hidden="true">
+      <path d="M4 16h56" />
+      <path d="M14 11v10 M24 11v10 M44 11v10 M54 11v10" opacity="0.45" />
+      <circle cx="34" cy="16" r="6" />
+    </svg>
+  ),
+  dp: (
+    <svg viewBox="0 0 64 32" aria-hidden="true">
+      <path d="M12 26 32 16 52 6" opacity="0.45" />
+      <circle cx="12" cy="26" r="3" />
+      <circle cx="32" cy="16" r="3" />
+      <circle cx="52" cy="6" r="3" />
+      <circle cx="12" cy="6" r="3" opacity="0.45" />
+      <circle cx="52" cy="26" r="3" opacity="0.45" />
+    </svg>
+  ),
+  graph: (
+    <svg viewBox="0 0 64 32" aria-hidden="true">
+      <path d="M10 24 28 8 46 24 32 18Z M28 8 32 18" opacity="0.45" />
+      <circle cx="10" cy="24" r="3.5" />
+      <circle cx="28" cy="8" r="3.5" />
+      <circle cx="46" cy="24" r="3.5" />
+      <circle cx="32" cy="18" r="3.5" />
+    </svg>
+  ),
+  greedy: (
+    <svg viewBox="0 0 64 32" aria-hidden="true">
+      <path d="M4 8h22 M30 16h28 M10 24h16" />
+      <path d="M4 30h56" opacity="0.35" />
+    </svg>
+  ),
+  string: (
+    <svg viewBox="0 0 64 32" aria-hidden="true">
+      <path d="M4 10h56" opacity="0.45" />
+      <path d="M4 24h56" opacity="0.45" />
+      <rect x="24" y="19" width="18" height="10" rx="2" />
+    </svg>
+  ),
+};
+
+/** 工作原理三步：hero 与 bento 网格之间的叙事带 */
+const STEPS = [
+  { n: '01', t: '命令流录制', d: '算法调用 tracer API，序列化为可存储、可回放的命令流' },
+  { n: '02', t: '时间轴重放', d: '引擎按 delay 切帧重放，seek 回退前缀即可，无需快照' },
+  { n: '03', t: '行锚定学习', d: '源码行随帧高亮，输入由种子复现，所见即所教' },
 ];
 
 /** kinetic 动词：均为两字，轮换时不产生布局抖动 */
@@ -76,10 +153,13 @@ function useTypewriter() {
   return text;
 }
 
-/** 计数上滚：ease-out 三次方，约 0.9s 到位 */
+/** 计数上滚：ease-out 三次方，约 0.9s 到位；reduced-motion 渲染期直接落终值 */
 function useCountUp(target: number, duration = 900) {
+  // 挂载时读一次即可：系统级偏好会话内几乎不变，与 useTypewriter 同款策略
+  const [reduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [v, setV] = useState(0);
   useEffect(() => {
+    if (reduced) return;
     let raf = 0;
     const t0 = performance.now();
     const tick = (t: number) => {
@@ -89,8 +169,8 @@ function useCountUp(target: number, duration = 900) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [target, duration]);
-  return v;
+  }, [target, duration, reduced]);
+  return reduced ? target : v;
 }
 
 /** 进入视口一次性触发，用于滚动 reveal */
@@ -126,6 +206,7 @@ export function Home({ onEnter }: Props) {
   const algos = useCountUp(11);
   const cats = useCountUp(6);
   const { ref: gridRef, inView } = useInView<HTMLElement>();
+  const { ref: stepsRef, inView: stepsIn } = useInView<HTMLElement>();
 
   return (
     <Box className={styles.page}>
@@ -155,8 +236,11 @@ export function Home({ onEnter }: Props) {
           <div className={styles.heroInner}>
             <Text className={styles.kicker} ff="monospace">// line-anchored algorithm learning</Text>
             <Title className={styles.headline} order={1}>
-              {word}算法的每一步
-              <span className={styles.typeCaret} aria-hidden="true">_</span>
+              <span className={styles.wordSlot}>
+                {word}
+                <span className={styles.typeCaret} aria-hidden="true">_</span>
+              </span>
+              算法的每一步
             </Title>
             <Text className={styles.sub} size="lg">
               命令流录制，时间轴重放；源码行随帧高亮，输入由种子复现。
@@ -177,32 +261,64 @@ export function Home({ onEnter }: Props) {
                 GitHub
               </Button>
             </Group>
-            <Text className={styles.metrics} ff="monospace">
-              <b>{pad(algos)}</b> algorithms · <b>{pad(cats)}</b> categories · <b>∞</b> snapshots
-            </Text>
+            <div className={styles.metrics}>
+              <span className={styles.stat}>
+                <b>{pad(algos)}</b>
+                <i>algorithms</i>
+              </span>
+              <span className={styles.stat}>
+                <b>{pad(cats)}</b>
+                <i>categories</i>
+              </span>
+              <span className={styles.stat}>
+                <b>∞</b>
+                <i>snapshots</i>
+              </span>
+            </div>
           </div>
           <span className={styles.scrollHint} aria-hidden="true">scroll ↓</span>
         </section>
 
-        <section ref={gridRef} className={styles.grid} aria-label="算法分类">
-          {CATEGORY_CARDS.map((card, i) => (
-            <button
-              key={card.id}
-              className={`${styles.card} ${styles[card.span]} ${inView ? styles.visible : styles.reveal}`}
-              style={{ transitionDelay: inView ? `${i * 60}ms` : '0ms' }}
-              onClick={() => onEnter(card.id)}
-              aria-label={`进入${card.name}`}
+        <section ref={stepsRef} className={styles.steps} aria-label="工作原理">
+          {STEPS.map((s, i) => (
+            <div
+              key={s.n}
+              className={`${styles.step} ${stepsIn ? styles.visible : styles.reveal}`}
+              style={{ transitionDelay: stepsIn ? `${i * 80}ms` : '0ms' }}
             >
-              <span className={styles.cardIndex}>{card.index}</span>
-              <span className={styles.cardName}>{card.name}</span>
-              <span className={styles.cardDesc}>{card.desc}</span>
-              {card.code && <span className={styles.codeLine}>{card.code}</span>}
-              <span className={styles.cardMeta}>
-                {card.count} algorithms
-                <IconArrowUpRight size={14} className={styles.cardArrow} />
-              </span>
-            </button>
+              <span className={styles.stepNum}>{s.n}</span>
+              <span className={styles.stepTitle}>{s.t}</span>
+              <span className={styles.stepDesc}>{s.d}</span>
+            </div>
           ))}
+        </section>
+
+        <section ref={gridRef} className={styles.grid} aria-label="算法分类">
+          {CATEGORY_CARDS.map((card, i) => {
+            const CardIcon = CATEGORY_ICONS[card.id];
+            return (
+              <button
+                key={card.id}
+                className={`${styles.card} ${styles[card.span]} ${inView ? styles.visible : styles.reveal}`}
+                style={{ transitionDelay: inView ? `${i * 60}ms` : '0ms' }}
+                onClick={() => onEnter(card.id)}
+                aria-label={`进入${card.name}`}
+              >
+                <span className={styles.cardIndex}>{card.index}</span>
+                <span className={styles.motif}>{MOTIFS[card.id]}</span>
+                <span className={styles.cardHead}>
+                  {CardIcon && <CardIcon size={18} stroke={1.8} className={styles.cardIcon} />}
+                  <span className={styles.cardName}>{card.name}</span>
+                </span>
+                <span className={styles.cardDesc}>{card.desc}</span>
+                {card.code && <span className={styles.codeLine}>{card.code}</span>}
+                <span className={styles.cardMeta}>
+                  {card.count} algorithms
+                  <IconArrowUpRight size={14} className={styles.cardArrow} />
+                </span>
+              </button>
+            );
+          })}
         </section>
       </main>
 

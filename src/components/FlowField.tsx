@@ -195,8 +195,22 @@ export function FlowField({ scheme }: Props) {
     document.addEventListener("visibilitychange", onVis);
     window.addEventListener("resize", onResize);
 
+    // 离屏暂停：hero 滚出视口即停 rAF，回视口恢复，避免不可见时空转烧 CPU
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!paused && !document.hidden) start();
+        } else {
+          stop();
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(canvas);
+
     return () => {
       stop();
+      io.disconnect();
       window.clearTimeout(resizeTimer);
       document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("resize", onResize);
