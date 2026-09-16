@@ -185,31 +185,36 @@ export class Array2DTracer extends Tracer {
     );
   }
 
-  private _cell(x: number, y: number): ArrayElement | undefined {
+  /** patch 定位：行/单元格不存在则创建——编辑距离等只 patch 不 set 的算法依赖此惰性建格 */
+  private _cell(x: number, y: number): ArrayElement {
     this.data[x] ??= [];
+    this.data[x][y] ??= { value: null, patched: false, selected: false };
     return this.data[x][y];
+  }
+
+  /** 只读定位：select/depatch 不创建格，避免未写入的格子提前撑开表格 */
+  private _peek(x: number, y: number): ArrayElement | undefined {
+    return this.data[x]?.[y];
   }
 
   _patch(x: number, y: number, v: unknown) {
     const cell = this._cell(x, y);
-    if (cell) {
-      cell.value = v;
-      cell.patched = true;
-    }
+    cell.value = v;
+    cell.patched = true;
   }
 
   _depatch(x: number, y: number) {
-    const cell = this._cell(x, y);
+    const cell = this._peek(x, y);
     if (cell) cell.patched = false;
   }
 
   _select(x: number, y: number) {
-    const cell = this._cell(x, y);
+    const cell = this._peek(x, y);
     if (cell) cell.selected = true;
   }
 
   _deselect(x: number, y: number) {
-    const cell = this._cell(x, y);
+    const cell = this._peek(x, y);
     if (cell) cell.selected = false;
   }
 

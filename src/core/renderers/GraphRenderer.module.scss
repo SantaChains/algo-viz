@@ -1,11 +1,15 @@
-@use '../../styles/mixins' as m;
+// 主视觉填充者：grow 权远大于日志卡的 1，优先吸收全部剩余空间；
+// 有图卡时日志卡因此稳居 38.2% 基准
+.graphCard {
+  flex: 1000 1 0 !important;
+}
 
 .svg {
+  display: block;
+  // 宽高跟随卡片可视区（定高后百分比可解析）；viewBox 方形经 preserveAspectRatio 居中内接，
+  // 既填满可用空间又不裁剪、不变形
   width: 100%;
-  max-width: m.rem(420px);
-  // 高度跟随卡片可视区，contain 保证 viewBox 内容完整不裁剪
   height: 100%;
-  object-fit: contain;
   margin: auto;
 }
 

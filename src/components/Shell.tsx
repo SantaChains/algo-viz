@@ -80,7 +80,7 @@ function resolveRoute(route: LabRoute | undefined) {
 
 export function Shell({ route, onHome }: { route?: LabRoute; onHome?: () => void }) {
   const [opened, { toggle }] = useDisclosure();
-  const [asideOpened, { toggle: toggleAside }] = useDisclosure(true);
+  const [asideOpened, { toggle: toggleAside }] = useDisclosure(false);
   const init = resolveRoute(route);
   const [active, setActive] = useState(init.category);
   const [demoId, setDemoId] = useState(init.demoId);

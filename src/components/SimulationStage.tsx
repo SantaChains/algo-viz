@@ -14,7 +14,7 @@ export function SimulationStage({ demo, siblings, onSelect }: Props) {
 
   return (
     <Stack gap="md" maw={1280} flex={1} style={{ minHeight: 0 }}>
-      <Box>
+      <Box style={{ flexShrink: 0 }}>
         <Group justify="space-between" align="center" wrap="nowrap">
           <Title order={2}>{demo.title}</Title>
           <Badge variant="light" color="teal" visibleFrom="xs">实时模拟</Badge>
@@ -24,6 +24,7 @@ export function SimulationStage({ demo, siblings, onSelect }: Props) {
 
       {siblings.length > 1 && (
         <SegmentedControl
+          style={{ flexShrink: 0 }}
           value={demo.id}
           onChange={onSelect}
           data={siblings.map((d) => ({ value: d.id, label: d.title }))}

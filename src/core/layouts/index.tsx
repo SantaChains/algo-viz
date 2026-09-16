@@ -28,6 +28,7 @@ export abstract class Layout implements Renderable {
       <div
         key={this.key}
         className={styles.layout}
+        data-dir={this.direction}
         style={{ flexDirection: this.direction }}
       >
         {this.childKeys.map((childKey) => {

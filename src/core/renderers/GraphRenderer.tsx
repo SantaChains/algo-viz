@@ -17,7 +17,7 @@ export function GraphRenderer({ title, nodes, edges, isDirected }: GraphRenderer
   // 每帧渲染都会遍历边，先建一次 id->node 索引，避免每条边 O(N) 线性查找
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
   return (
-    <RendererCard title={title}>
+    <RendererCard title={title} className={styles.graphCard}>
       <svg className={styles.svg} viewBox="0 0 320 320">
         <defs>
           <marker

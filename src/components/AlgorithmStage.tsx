@@ -34,7 +34,7 @@ export function AlgorithmStage({ demo, cfg, siblings, onSelect }: Props) {
 
   return (
     <Stack gap="md" maw={1280} flex={1} className={styles.stage}>
-      <Box>
+      <Box className={styles.head}>
         <Group justify="space-between" align="center" wrap="nowrap">
           <Title order={2}>{demo.title}</Title>
           <Badge variant="light" color="violet" visibleFrom="xs">
@@ -45,12 +45,15 @@ export function AlgorithmStage({ demo, cfg, siblings, onSelect }: Props) {
       </Box>
 
       {siblings.length > 1 && (
-        <SegmentedControl
-          value={demo.id}
-          onChange={onSelect}
-          data={siblings.map((d) => ({ value: d.id, label: d.title }))}
-          aria-label="切换算法"
-        />
+        <div className={styles.segmentScroll}>
+          <SegmentedControl
+            className={styles.segment}
+            value={demo.id}
+            onChange={onSelect}
+            data={siblings.map((d) => ({ value: d.id, label: d.title }))}
+            aria-label="切换算法"
+          />
+        </div>
       )}
 
       <Grid gap="md" className={styles.stageGrid}>

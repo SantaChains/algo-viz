@@ -1,8 +1,15 @@
 @use '../../styles/mixins' as m;
 
+// 二维表卡：作所在列的填充者（编辑距离主区），表格超高时收缩并内部滚动
+.tableCard {
+  flex: 1 1 auto !important;
+  min-height: m.rem(160px);
+}
+
 .scroll {
-  overflow-x: auto;
+  overflow: auto;
   flex: 1 1 auto;
+  min-height: 0;
 }
 
 .grid {

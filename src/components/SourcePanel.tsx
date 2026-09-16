@@ -10,16 +10,33 @@ interface Props {
   annotations?: Record<number, string>;
 }
 
+/** 最近的可滚动祖先（源码面板的 ScrollArea viewport）；找不到返回 null，绝不回退到 window */
+function scrollParentOf(el: HTMLElement): HTMLElement | null {
+  for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+    const oy = getComputedStyle(p).overflowY;
+    if ((oy === 'auto' || oy === 'scroll') && p.scrollHeight > p.clientHeight) return p;
+  }
+  return null;
+}
+
 /** 源码学习面板：行号 + 代码 + 中文注释三列，当前执行行随播放高亮，点击行 seek 到该行步骤 */
 export function SourcePanel({ source, annotations }: Props) {
   useVisualization();
   const lines = useMemo(() => tokenizeLines(source), [source]);
   const currentLine = viz.chunks[viz.cursor - 1]?.lineNumber ?? null;
 
-  // 播放/步进时把当前执行行滚入视野，长源码也不丢焦点（nearest：已在视野则不动）
+  // 播放/步进时让当前执行行在「源码面板内部」滚到可见，绝不影响整页滚动：
+  // 手动改最近可滚动祖先的 scrollTop（scrollIntoView 会连带滚动 window，窄屏下导致页面跳动）
   const currentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    currentRef.current?.scrollIntoView({ block: 'nearest' });
+    const el = currentRef.current;
+    if (!el) return;
+    const viewport = scrollParentOf(el);
+    if (!viewport) return;
+    const er = el.getBoundingClientRect();
+    const vr = viewport.getBoundingClientRect();
+    if (er.top < vr.top) viewport.scrollTop += er.top - vr.top;
+    else if (er.bottom > vr.bottom) viewport.scrollTop += er.bottom - vr.bottom;
   }, [currentLine]);
 
   const seekToLine = (line: number) => {

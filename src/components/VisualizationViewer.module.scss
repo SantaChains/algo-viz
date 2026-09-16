@@ -1,10 +1,20 @@
+@use '../styles/mixins' as m;
+
 .viewer {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  min-height: 320px;
-  max-height: 560px;
-  // 兜底：卡片触底后若仍放不下，整体滚动而不是继续挤压
-  overflow-y: auto;
-  overflow-x: hidden;
+  min-height: m.rem(320px);
+  // 卡片各自内部滚动，viewer 本身不滚：日志增长只在卡内消化，绝不顶开整页
+  overflow: hidden;
+}
+
+// 窄屏（<lg）舞台随内容堆叠、高度不确定，需给 viewer 一个「确定高度」：
+// 否则日志卡 flex-basis:38.2% 与图 svg height:100% 的百分比无从解析，
+// 框体会随日志增长此消彼长、图被裁剪。桌面（≥lg）舞台已定高，viewer 弹性填满即确定。
+@include m.smaller-than(m.$bp-lg) {
+  .viewer {
+    flex: 0 0 auto;
+    height: clamp(#{m.rem(320px)}, 56vh, #{m.rem(560px)});
+  }
 }

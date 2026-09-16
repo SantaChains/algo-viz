@@ -1,6 +1,6 @@
 import { record, delay, setRoot } from '../core/engine';
 import { Array1DTracer, Array2DTracer, LogTracer } from '../core/tracers';
-import { VerticalLayout } from '../core/layouts';
+import { VerticalLayout, HorizontalLayout } from '../core/layouts';
 import { generateWords } from './generators';
 import type { Command } from '../core/types';
 import type { DpConfig } from './types';
@@ -19,7 +19,11 @@ export function editDistanceCommands(cfg: DpConfig): Command[] {
     const bTracer = new Array1DTracer('sb', `B = ${b}`);
     const dpTracer = new Array2DTracer('dp', 'dp[i][j]：A 前 i 个 → B 前 j 个的最少操作数');
     const logTracer = new LogTracer('log', '日志');
-    new VerticalLayout('root', ['sa', 'sb', 'dp', 'log']);
+    // 最优排版：A/B 串同行置于顶部，DP 表独占主区全高，日志固定右栏——
+    // 四卡纵堆会把 DP 表压出滚动条，故主区与日志横向分栏
+    new HorizontalLayout('ab', ['sa', 'sb']);
+    new VerticalLayout('main', ['ab', 'dp']);
+    new HorizontalLayout('root', ['main', 'log']);
     setRoot('root');
 
     aTracer.set(a.split(''));

@@ -13,7 +13,8 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  min-width: m.rem(40px);
+  // 34px：编辑距离 A/B 同行时 7+6 个单字符格可在半宽列内放下，不溢横向滚动条
+  min-width: m.rem(34px);
   padding: m.rem(8px) m.rem(6px);
   border-radius: var(--mantine-radius-sm);
   border: 1px solid var(--mantine-color-default-border);

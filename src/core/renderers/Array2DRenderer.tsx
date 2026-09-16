@@ -9,7 +9,7 @@ export function Array2DRenderer({ title, data }: { title: string; data: ArrayEle
   const cols = Math.max(0, ...data.map((row) => row.length));
 
   return (
-    <RendererCard title={title}>
+    <RendererCard title={title} className={styles.tableCard}>
       <div className={styles.scroll}>
         <div
           className={styles.grid}

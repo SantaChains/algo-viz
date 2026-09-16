@@ -9,6 +9,29 @@
   color: var(--mantine-color-text);
 }
 
+// 标题区与算法切换器不参与纵向压缩：定高舞台上空间紧张时也不被挤扁/裁剪
+.head {
+  flex: 0 0 auto;
+}
+
+// 切换器外层滚动容器：标签总宽超主列（如图论四项）时横向滚动接管，
+// 按钮绝不被 Mantine 根的 overflow:hidden 裁剪/折叠
+.segmentScroll {
+  flex: 0 0 auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.segment {
+  flex: 0 0 auto;
+  // 按内容定宽：窄屏不压缩标签，宽屏不拉伸散开
+  width: fit-content;
+
+  :global(.mantine-SegmentedControl-label) {
+    white-space: nowrap;
+  }
+}
+
 // 桌面双列：整页一屏，不产生页面滚动，播放器/统计条常驻视口内
 .stage {
   @include m.larger-than(m.$bp-lg) {
